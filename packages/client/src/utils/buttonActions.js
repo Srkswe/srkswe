@@ -320,7 +320,7 @@ const updateStateHandler = action => {
   }
 }
 
-const s3UploadHandler = async action => {
+const uploadHandler = async action => {
   const { componentId } = action.parameters
   if (!componentId) {
     return
@@ -411,7 +411,7 @@ const handlerMap = {
   ["Log Out"]: logoutHandler,
   ["Close Screen Modal"]: closeScreenModalHandler,
   ["Update State"]: updateStateHandler,
-  ["Upload File to S3"]: s3UploadHandler,
+  ["Upload File"]: uploadHandler,
   ["Export Data"]: exportDataHandler,
   ["Continue if / Stop if"]: continueIfHandler,
   ["Show Notification"]: showNotificationHandler,
