@@ -127,6 +127,15 @@ export const FIELDS = {
       presence: false,
     },
   },
+  SIGNATURE: {
+    name: "Signature",
+    type: FieldType.SIGNATURE,
+    icon: "AnnotatePen",
+    constraints: {
+      type: "array",
+      presence: false,
+    },
+  },
   LINK: {
     name: "Relationship",
     type: FieldType.LINK,

@@ -120,6 +120,7 @@ export const TypeIconMap = {
   [FieldType.OPTIONS]: "Dropdown",
   [FieldType.DATETIME]: "Calendar",
   [FieldType.BARCODEQR]: "Camera",
+  [FieldType.SIGNATURE]: "AnnotatePen",
   [FieldType.LONGFORM]: "TextAlignLeft",
   [FieldType.ARRAY]: "Duplicate",
   [FieldType.NUMBER]: "123",

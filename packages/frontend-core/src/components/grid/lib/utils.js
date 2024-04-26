@@ -12,7 +12,6 @@ export const getColumnIcon = column => {
     return "MagicWand"
   }
   const { type, subtype } = column.schema
-
   const result =
     typeof TypeIconMap[type] === "object" && subtype
       ? TypeIconMap[type][subtype]

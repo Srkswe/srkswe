@@ -191,9 +191,17 @@ const parseType = (value, type) => {
     return value === true
   }
 
-  // Parse attachments, treating no elements as null
-  if (type === FieldTypes.ATTACHMENTS) {
+  // Parse attachments/signatures, treating no elements as null
+  if (type === FieldTypes.ATTACHMENTS || type === FieldTypes.SIGNATURE) {
     if (!Array.isArray(value) || !value.length) {
+      return null
+    }
+    return value
+  }
+
+  // Parse attachment single, treating no key as null
+  if (type === FieldTypes.ATTACHMENT_SINGLE) {
+    if (!value?.key) {
       return null
     }
     return value
@@ -245,10 +253,8 @@ const maxLengthHandler = (value, rule) => {
 // Evaluates a max file size (MB) constraint
 const maxFileSizeHandler = (value, rule) => {
   const limit = parseType(rule.value, "number")
-  return (
-    value == null ||
-    !value.some(attachment => attachment.size / 1000000 > limit)
-  )
+  const check = attachment => attachment.size / 1000000 > limit
+  return value == null || !(value?.key ? check(value) : value.some(check))
 }
 
 // Evaluates a max total upload size (MB) constraint
@@ -256,8 +262,11 @@ const maxUploadSizeHandler = (value, rule) => {
   const limit = parseType(rule.value, "number")
   return (
     value == null ||
-    value.reduce((acc, currentItem) => acc + currentItem.size, 0) / 1000000 <=
-      limit
+    (value?.key
+      ? value.size / 1000000 <= limit
+      : value.reduce((acc, currentItem) => acc + currentItem.size, 0) /
+          1000000 <=
+        limit)
   )
 }
 

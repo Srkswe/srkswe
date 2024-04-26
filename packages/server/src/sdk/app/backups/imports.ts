@@ -61,7 +61,8 @@ export async function updateAttachmentColumns(prodAppId: string, db: Database) {
         for (let column of columns) {
           const columnType = table.schema[column].type
           if (
-            columnType === FieldType.ATTACHMENTS &&
+            (columnType === FieldType.ATTACHMENTS ||
+              columnType === FieldType.SIGNATURE) &&
             Array.isArray(row[column])
           ) {
             row[column] = row[column].map((attachment: RowAttachment) =>
