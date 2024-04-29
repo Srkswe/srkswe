@@ -1,10 +1,12 @@
 <script>
   import { Select, DatePicker, Multiselect, TextArea } from "@budibase/bbui"
+  import { FieldType } from "@budibase/types"
   import LinkedRowSelector from "components/common/LinkedRowSelector.svelte"
   import DrawerBindableInput from "../../common/bindings/DrawerBindableInput.svelte"
   import ModalBindableInput from "../../common/bindings/ModalBindableInput.svelte"
   import AutomationBindingPanel from "../../common/bindings/ServerBindingPanel.svelte"
   import Editor from "components/integration/QueryEditor.svelte"
+  import KeyValueBuilder from "components/integration/KeyValueBuilder.svelte"
 
   export let onChange
   export let field
@@ -21,6 +23,16 @@
 
   function schemaHasOptions(schema) {
     return !!schema.constraints?.inclusion?.length
+  }
+
+  const handleAttachmentParams = keyValuObj => {
+    let params = {}
+    if (keyValuObj?.length) {
+      for (let param of keyValuObj) {
+        params[param.url] = param.filename
+      }
+    }
+    return params
   }
 </script>
 
@@ -77,7 +89,31 @@
     on:change={e => onChange(e, field)}
     useLabel={false}
   />
-{:else if ["string", "number", "bigint", "barcodeqr", "array"].includes(schema.type)}
+{:else if schema.type === FieldType.ATTACHMENTS || schema.type === FieldType.ATTACHMENT_SINGLE}
+  <div class="attachment-field-spacinng">
+    <KeyValueBuilder
+      on:change={e =>
+        onChange(
+          {
+            detail: e.detail.map(({ name, value }) => ({
+              url: name,
+              filename: value,
+            })),
+          },
+          field
+        )}
+      object={handleAttachmentParams(value[field])}
+      allowJS
+      {bindings}
+      keyBindings
+      customButtonText={"Add attachment"}
+      keyPlaceholder={"URL"}
+      valuePlaceholder={"Filename"}
+      noAddButton={schema.type === FieldType.ATTACHMENT_SINGLE &&
+        value[field].length >= 1}
+    />
+  </div>
+{:else if ["string", "number", "bigint", "barcodeqr", "array", "attachment"].includes(schema.type)}
   <svelte:component
     this={isTestModal ? ModalBindableInput : DrawerBindableInput}
     panel={AutomationBindingPanel}
@@ -90,3 +126,10 @@
     title={schema.name}
   />
 {/if}
+
+<style>
+  .attachment-field-spacinng {
+    margin-top: var(--spacing-s);
+    margin-bottom: var(--spacing-l);
+  }
+</style>

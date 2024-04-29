@@ -4,8 +4,10 @@ import {
   encodeJSBinding,
 } from "@budibase/string-templates"
 import sdk from "../sdk"
-import { Row } from "@budibase/types"
+import { AutomationAttachment, FieldType, Row } from "@budibase/types"
 import { LoopInput, LoopStepType } from "../definitions/automations"
+import { objectStore, context } from "@budibase/backend-core"
+import * as uuid from "uuid"
 
 /**
  * When values are input to the system generally they will be of type string as this is required for template strings.
@@ -96,6 +98,61 @@ export function getError(err: any) {
   return typeof err !== "string" ? err.toString() : err
 }
 
+export async function sendAutomationAttachmentsToStorage(
+  tableId: string,
+  row: Row
+) {
+  let table = await sdk.tables.getTable(tableId)
+  const attachmentRows: { [key: string]: any } = {}
+
+  Object.entries(row).forEach(([prop, value]) => {
+    const schema = table.schema[prop]
+    if (
+      Object.hasOwn(table.schema, prop) &&
+      schema?.type === (FieldType.ATTACHMENTS || FieldType.ATTACHMENT_SINGLE)
+    ) {
+      attachmentRows[prop] = value
+    }
+  })
+  for (const prop in attachmentRows) {
+    const attachments = attachmentRows[prop]
+    let updatedAttachments = []
+    if (attachments.length) {
+      updatedAttachments = await Promise.all(
+        attachments.map(async (attachment: AutomationAttachment) => {
+          let s3Key
+          let { path, content } = await objectStore.processAutomationAttachment(
+            attachment
+          )
+          const extension = attachment.filename.split(".").pop() || ""
+          // If the path is an attachment that already exists, we don't want to stream it again,
+          // just use the existing s3 key else it doesn't exist and we need to upload
+          if (path?.includes(`${context.getProdAppId()}/attachments/`)) {
+            s3Key = attachment.url
+          } else {
+            const processedFileName = `${uuid.v4()}.${extension}`
+            s3Key = `${context.getProdAppId()}/attachments/${processedFileName}`
+            await objectStore.streamUpload({
+              bucket: objectStore.ObjectStoreBuckets.APPS,
+              stream: content,
+              filename: s3Key,
+            })
+          }
+
+          return {
+            size: 10,
+            name: attachment.filename,
+            extension,
+            key: s3Key,
+          }
+        })
+      )
+    }
+    row[prop] = updatedAttachments
+  }
+
+  return row
+}
 export function substituteLoopStep(hbsString: string, substitute: string) {
   let checkForJS = isJSBinding(hbsString)
   let substitutedHbsString = ""
