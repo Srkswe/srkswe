@@ -92,8 +92,9 @@ export function validate(rows: Rows, schema: TableSchema): ValidationResults {
       ) {
         results.schemaValidation[columnName] = false
       } else if (
-        columnType === FieldType.BB_REFERENCE &&
-        !isValidBBReference(columnData, columnSubtype)
+        (columnType === FieldType.BB_REFERENCE ||
+          columnType === FieldType.BB_REFERENCE_SINGLE) &&
+        !isValidBBReference(columnData, columnType, columnSubtype)
       ) {
         results.schemaValidation[columnName] = false
       } else {
@@ -147,6 +148,10 @@ export function parse(rows: Rows, schema: TableSchema): Rows {
               utils.unreachable(columnSubtype)
           }
         }
+      } else if (columnType === FieldType.BB_REFERENCE_SINGLE) {
+        const parsedValue =
+          columnData && parseCsvExport<{ _id: string }>(columnData)
+        parsedRow[columnName] = parsedValue?._id
       } else if (
         (columnType === FieldType.ATTACHMENTS ||
           columnType === FieldType.ATTACHMENT_SINGLE) &&
@@ -163,24 +168,31 @@ export function parse(rows: Rows, schema: TableSchema): Rows {
 }
 
 function isValidBBReference(
-  columnData: any,
-  columnSubtype: BBReferenceFieldSubType.USER | BBReferenceFieldSubType.USERS
+  data: any,
+  type: FieldType.BB_REFERENCE | FieldType.BB_REFERENCE_SINGLE,
+  subtype: BBReferenceFieldSubType
 ): boolean {
-  switch (columnSubtype) {
+  if (typeof data !== "string") {
+    return false
+  }
+
+  if (type === FieldType.BB_REFERENCE_SINGLE) {
+    if (!data) {
+      return true
+    }
+    const user = parseCsvExport<{ _id: string }>(data)
+    return db.isGlobalUserID(user._id)
+  }
+
+  switch (subtype) {
     case BBReferenceFieldSubType.USER:
     case BBReferenceFieldSubType.USERS: {
-      if (typeof columnData !== "string") {
-        return false
-      }
-      const userArray = parseCsvExport<{ _id: string }[]>(columnData)
+      const userArray = parseCsvExport<{ _id: string }[]>(data)
       if (!Array.isArray(userArray)) {
         return false
       }
 
-      if (
-        columnSubtype === BBReferenceFieldSubType.USER &&
-        userArray.length > 1
-      ) {
+      if (subtype === BBReferenceFieldSubType.USER && userArray.length > 1) {
         return false
       }
 
@@ -190,6 +202,6 @@ function isValidBBReference(
       return !constainsWrongId
     }
     default:
-      throw utils.unreachable(columnSubtype)
+      throw utils.unreachable(subtype)
   }
 }
