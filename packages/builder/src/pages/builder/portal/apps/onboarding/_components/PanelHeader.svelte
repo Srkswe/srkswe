@@ -3,12 +3,12 @@
   import { Heading, Body } from "@budibase/bbui"
 
   export let onBack = null
-  export let title = ""
+  export let title = "Carenty"
   export let subtitle = ""
 </script>
 
 <div class="header">
-  <img alt="Budibase Logo" class="budibaseLogo" src="/builder/bblogo.png" />
+  <img alt="Budibase Logo" class="budibaseLogo" src="/builder/carenty.png" />
   <div class="headingAndBack">
     {#if onBack}
       <button on:click={onBack}>

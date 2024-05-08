@@ -11,7 +11,7 @@
   import { goto } from "@roxi/routify"
   import { API } from "api"
   import { admin, auth } from "stores/portal"
-  import Logo from "assets/bb-emblem.svg"
+  import Logo from "assets/Fotoram.io (2).png"
   import { TestimonialPage } from "@budibase/frontend-core/src/components"
   import { passwordsMatch, handleError } from "../auth/_components/utils"
 
@@ -47,8 +47,8 @@
   <Layout gap="M" noPadding>
     <Layout justifyItems="center" noPadding>
       <img alt="logo" src={Logo} />
-      <Heading size="M">Create an admin user</Heading>
-      <Body>The admin user has access to everything in Budibase.</Body>
+      <Heading size="M">Create a Admin Page</Heading>
+      <Body>Lets Connect With Carenty</Body>
     </Layout>
     <Layout gap="S" noPadding>
       <FancyForm bind:this={form}>
@@ -133,8 +133,9 @@
         size="L"
         disabled={Object.keys(errors).length > 0 || submitted}
         on:click={save}
+        style="background-color: pink; color: white;"
       >
-        Create super admin user
+        Create Admin user
       </Button>
     </Layout>
   </Layout>
@@ -142,6 +143,6 @@
 
 <style>
   img {
-    width: 48px;
+    width: 60px;
   }
 </style>

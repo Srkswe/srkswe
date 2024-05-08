@@ -1,5 +1,5 @@
 <script>
-  import BG from "../../assets/bg.png"
+  import BG from "../../assets/whiteback.jpg"
 </script>
 
 <div class="split-page">
@@ -24,7 +24,7 @@
     overflow: hidden;
   }
   .left {
-    background: var(--background);
+    background: black;
     display: grid;
     place-items: center;
     padding: 40px;

@@ -16,7 +16,7 @@
   import GoogleButton from "./_components/GoogleButton.svelte"
   import OIDCButton from "./_components/OIDCButton.svelte"
   import { handleError } from "./_components/utils"
-  import Logo from "assets/bb-emblem.svg"
+  import Logo from "assets/Fotoram.io (2).png"
   import { TestimonialPage } from "@budibase/frontend-core/src/components"
   import { onMount } from "svelte"
 
@@ -73,7 +73,7 @@
           <img alt="logo" src={$organisation.logoUrl || Logo} />
         {/if}
         <Heading size="M">
-          {$organisation.loginHeading || "Log in to Budibase"}
+          {$organisation.loginHeading || "Join With us Carenty"}
         </Heading>
       </Layout>
       <Layout gap="S" noPadding>
@@ -136,7 +136,7 @@
             disabled={Object.keys(errors).length > 0}
             on:click={login}
           >
-            {$organisation.loginButton || `Log in to ${company}`}
+            {$organisation.loginButton || `Log in to Carenty`}
           </Button>
         </Layout>
         <Layout gap="XS" noPadding justifyItems="center">

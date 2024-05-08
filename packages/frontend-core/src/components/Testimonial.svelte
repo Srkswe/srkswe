@@ -6,23 +6,23 @@
 
   const testimonials = [
     {
-      text: "Budibase was the only solution that checked all the boxes for Covanta. Covanta expects to realize $3.2MM in savings due to the elimination of redundant data entry.",
-      name: "Charles Link",
-      role: "Senior Director, Data and Analytics",
+      text: "The only person you should try to be better than is the person you were yesterday.",
+      name: "Alex",
+      role: "Director",
       image: Covanta,
       imageSize: 105,
     },
     {
-      text: "Budibase was mission-critical for us and went a long way in preventing what could have become a humanitarian crisis here in Bulgaria.",
-      name: "Bozhidar Bozhanov",
-      role: "Government of Bulgaria",
+      text: "We are alone cannot change the world, but we can cast a stone across the waters to create many ripples",
+      name: "Annai terasa",
+      role: "Our Mother",
       image: Bulgaria,
       imageSize: 49,
     },
     {
-      text: "Centralization of authentication, quick turnaround time for requests, integration with different database systems has given it the edge and it’s now used daily for internal development for those apps that you know you need but don’t feel value in losing days of development to reinvent the wheel.",
-      name: "Davide Lenzarini",
-      role: "IT manager",
+      text: "3 Words Win Win Again",
+      name: "SRK",
+      role: "IT",
       image: Schnellecke,
       imageSize: 141,
     },
@@ -53,15 +53,18 @@
     padding: 40px;
   }
   .text {
-    font-size: var(--font-size-l);
+    font-size: 20px;
     font-style: italic;
+    color: black;
   }
   .name {
     font-weight: bold;
     color: var(--spectrum-global-color-gray-900);
     font-size: var(--font-size-l);
+    color: black;
   }
   .company {
     color: var(--spectrum-global-color-gray-700);
+    color: black;
   }
 </style>

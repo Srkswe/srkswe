@@ -10,7 +10,7 @@
   } from "@budibase/bbui"
   import { goto, params } from "@roxi/routify"
   import { auth, organisation } from "stores/portal"
-  import Logo from "assets/bb-emblem.svg"
+  import Logo from "assets/Fotoram.io (2).png"
   import { TestimonialPage } from "@budibase/frontend-core/src/components"
   import { onMount } from "svelte"
   import { handleError, passwordsMatch } from "./_components/utils"

@@ -6,9 +6,9 @@
 
   $: platformTitleText = $organisation.platformTitle
   $: platformTitle =
-    !$auth.user && platformTitleText ? platformTitleText : "Budibase"
+    !$auth.user && platformTitleText ? platformTitleText : "Carenty"
 
-  $: faviconUrl = $organisation.faviconUrl || "/builder/bblogo.png"
+  $: faviconUrl = $organisation.faviconUrl || "/builder/Fotoram.io (2).png"
 
   onMount(async () => {
     await organisation.init()
@@ -21,12 +21,13 @@
 -->
 
 <svelte:head>
-  <title>{platformTitle}</title>
+  <!--<title>{platformTitle}</title>-->
+  <title>Carenty.in</title>
 
   {#if loaded && !$auth.user && faviconUrl}
     <link rel="icon" href={faviconUrl} />
   {:else}
     <!-- A default must be set or the browser defaults to favicon.ico behaviour -->
-    <link rel="icon" href={"/builder/bblogo.png"} />
+    <link rel="icon" href={"/builder/carenty.png"} />
   {/if}
 </svelte:head>
